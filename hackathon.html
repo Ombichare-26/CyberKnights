@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Tracker - Real-time Market Data</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        
+                        <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
+                    </svg>
+                    <h1>Stock Tracker</h1>
+                </div>
+                <div class="status">
+                    <div class="live-indicator">
+                        <div class="pulse"></div>
+                        <span>Live Data</span>
+                    </div>
+                    <div class="last-update">
+                        Last updated: <span id="lastUpdate">--:--:--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Stock Search -->
+            <section class="search-section">
+                <div class="card">
+                    <form id="stockForm" class="search-form">
+                        <div class="form-group">
+                            <label for="stockInput">Search Stock Symbol</label>
+                            <div class="input-wrapper">
+                                <input 
+                                    type="text" 
+                                    id="stockInput" 
+                                    placeholder="Enter symbol (e.g., AAPL, GOOGL, MSFT)"
+                                    autocomplete="off"
+                                >
+                                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                            Track Stock
+                        </button>
+                    </form>
+
+                    <div class="popular-stocks">
+                        <label>Popular Stocks</label>
+                        <div class="stock-buttons" id="popularStocks">
+                            <!-- Popular stock buttons will be generated here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <section id="loadingSection" class="loading-section hidden">
+                <div class="card">
+                    <div class="loading-content">
+                        <div class="spinner"></div>
+                        <p>Fetching real-time data...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Error State -->
+            <section id="errorSection" class="error-section hidden">
+                <div class="card error-card">
+                    <div class="error-content">
+                        <h3>Unable to fetch stock data</h3>
+                        <p id="errorMessage">Please check the symbol and try again.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stock Data Display -->
+            <section id="stockDataSection" class="stock-data-section hidden">
+                <!-- Stock Overview -->
+                <div class="stock-overview">
+                    <div class="card main-stock-card">
+                        <div class="stock-header">
+                            <div class="stock-info">
+                                <h2 id="stockSymbol">--</h2>
+                                <p id="stockName">--</p>
+                            </div>
+                            <div class="price-info">
+                                <div class="current-price" id="currentPrice">$0.00</div>
+                                <div class="price-change" id="priceChange">
+                                    <svg class="change-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="18,15 12,9 6,15"></polyline>
+                                    </svg>
+                                    <span>+0.00 (+0.00%)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="real-time-indicator">
+                            <div class="pulse"></div>
+                            <span>Real-time • Last trade: <span id="lastTradeTime">--:--:--</span></span>
+                        </div>
+                    </div>
+
+                    <div class="quick-stats">
+                        <div class="card stat-card">
+                            <h3>Today's Range</h3>
+                            <div class="stat-item">
+                                <span>Low</span>
+                                <span id="dayLow">$0.00</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>High</span>
+                                <span id="dayHigh">$0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="card stat-card">
+                            <h3>Volume & Market Cap</h3>
+                            <div class="stat-item">
+                                <span>Volume</span>
+                                <span id="volume">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Market Cap</span>
+                                <span id="marketCap">N/A</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Chart -->
+                <div class="card chart-card">
+                    <div class="chart-header">
+                        <h3>Price Chart</h3>
+                        <div class="chart-controls">
+                            <span>Time Range:</span>
+                            <select id="timeRange">
+                                <option value="1D">1 Day</option>
+                                <option value="5D">5 Days</option>
+                                <option value="1M">1 Month</option>
+                                <option value="3M">3 Months</option>
+                                <option value="1Y">1 Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color"></div>
+                            <span>Stock Price</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Metrics -->
+                <div class="detailed-metrics">
+                    <div class="card metric-card">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <p>Previous Close</p>
+                                <p class="metric-value" id="previousClose">$0.00</p>
+                            </div>
+                            <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12,6 12,12 16,14"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="card metric-card">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <p>Open</p>
+                                <p class="metric-value" id="openPrice">$0.00</p>
+                            </div>
+                            <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5,3 19,12 5,21 12,12"></polygon>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="card metric-card">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <p>52W High</p>
+                                <p class="metric-value" id="fiftyTwoWeekHigh">$0.00</p>
+                            </div>
+                            <svg class="metric-icon positive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="18,15 12,9 6,15"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="card metric-card">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <p>52W Low</p>
+                                <p class="metric-value" id="fiftyTwoWeekLow">$0.00</p>
+                            </div>
+                            <svg class="metric-icon negative" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Welcome State -->
+            <section id="welcomeSection" class="welcome-section">
+                <div class="card">
+                    <div class="welcome-content">
+                        <svg class="welcome-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
+                        </svg>
+                        <h2>Welcome to Stock Tracker</h2>
+                        <p>Search for a stock symbol above to view real-time market data, charts, and key financial metrics.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
