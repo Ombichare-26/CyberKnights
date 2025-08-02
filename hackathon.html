@@ -103,7 +103,7 @@
                     </p>
                 </div>
 
-                <div class="stock-price">
+<div class="stock-price">
 
                     <h2 id="current-price">$0.00</h2>
                     <p id="priceChange">
@@ -114,7 +114,8 @@
                    </svg>
                   <span>+0.00 (+0.00%)</span>
                      </p>
-                     </div>
+
+</div>
 
                 <div class="real-time">
                     <div class="blink">
@@ -129,7 +130,98 @@
                 
             </div>
 
+            <div class="today-card">
+                <div class="today-content">
+                    <h3>Today's Range</h3>
+                    <p>Low <span id="daylow">$0.00</span> </p>
+                    <p>High <span id="dayhigh">$0.00</span></p>
+                </div>
+                
+            </div>
+
+             <div class="volume-card">
+                <div class="volume-content">
+                    <h3>Volume & Market Cap</h3>
+                    <p>Volume <span id="volume">0</span> </p>
+                    <p>Market Cap <span id="marketcap">N/A</span></p>
+                </div>
+                
+            </div>
+
+            <div class="chart">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h2>Price Chart</h2>
+                        <label for="timerange">Time range: </label>
+                        <select name="timerange" id="timerange">
+                            <option value="1">1 Day</option>
+                            <option value="2">5 Days</option>
+                            <option value="3">1 Month</option>
+                            <option value="4">3 Months</option>
+                            <option value="5">1 Year</option>
+                        </select>
+                    </div>
+
+                    <div class="chart-content">
+                        <canvas id="pricechart"></canvas>
+                    </div>
+
+                    <div class="chart-legend">
+                        <div class="legend-color">
+
+                        </div>
+                        <p>Stock Price</p>
+                    </div>
+                </div>
+
+            </div>
             
+            
+            <div class="metrics-class">
+                <div class="metric-card">
+                    <div class="metric-content">
+                        <p><strong>Previous Close</strong></p>
+                        <span id="previousClose">$0.00</span>
+                        <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <polyline points="16,13 11,11 11,6"></polyline>
+                        </svg> 
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-content">
+                        <p><strong>Open</strong></p>
+                        <span id="open">$0.00</span>
+                        <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                           
+                            <polygon points="10,10 10,20 15,15 10,10"></polygon>
+                        </svg> 
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-content">
+                        <p><strong>52W High</strong></p>
+                        <span id="52Whigh">$0.00</span>
+                        <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="18,15 12,9 6,15 "></polyline>
+                           
+                        </svg> 
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-content">
+                        <p><strong>52W Low</strong></p>
+                        <span id="52Wlow">$0.00</span>
+                        <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                           
+                            <polyline points="6,10 12,16 18,10"></polyline>
+                        </svg> 
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 </body>
