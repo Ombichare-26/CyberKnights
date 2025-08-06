@@ -36,7 +36,9 @@ header{
             height: 8px;
             background-color: #10b981;
             border-radius: 50%;
-            animation: pulse 2s infinite;
+            animation-name: blink;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
         }
 
  @keyframes blink {
@@ -47,8 +49,9 @@ header{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    align-items: center;
     margin: 10px;
-    gap: 40px;
+    gap: 20px;
     font-size: 20px;
 }
 
