@@ -1,194 +1,264 @@
-/* ===== Global Reset ===== */
+/* Base styles */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ===== Base Styling ===== */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f6; /* Near white */
-  color: #1f2937;
-  line-height: 1.6;
+    background-color: #f9f9f9; /* close-to-white background */
+    color: #333;
+    line-height: 1.6;
 }
 
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 1rem;
+/* Header */
+header {
+    background-color: #1f1f1f; /* dark header */
+    color: #cccccc; /* faint text */
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* ===== Header ===== */
-.header {
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid #e5e7eb;
+.heading h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    animation: fadeInDown 0.6s ease-in-out;
 }
 
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 4rem;
+.heading .icon {
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+    margin-bottom: 10px;
+    stroke: #3498db;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+/* Cards and containers */
+.card, .error-card, .main-stock-card, .chart-card, .today-card, .volume-card, .metric-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin: 20px auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 800px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.header-title {
-  color: #2563eb; /* Blue text */
-  font-size: 1.5rem;
-  font-weight: 600;
+.card:hover,
+.error-card:hover,
+.main-stock-card:hover,
+.chart-card:hover,
+.today-card:hover,
+.volume-card:hover,
+.metric-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    animation: pulse 0.4s ease-in-out;
 }
 
-.logo .icon {
-  width: 32px;
-  height: 32px;
-  stroke: #facc15; /* Yellow stroke */
+/* Search Area */
+.Searching input {
+    width: 60%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border-color 0.3s;
 }
 
-/* ===== Status Section ===== */
-.status {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: 0.875rem;
-  color: #6b7280;
+.Searching input:focus {
+    border-color: #3498db;
 }
 
-.pulse {
-  width: 8px;
-  height: 8px;
-  background-color: #10b981;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
+.btn {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.2); }
+.btn:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
 }
 
-/* ===== Cards ===== */
-.card,
-.main-stock-card,
-.stat-card,
-.metric-card,
-.chart-card,
-.error-card {
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+.search_icon, .search_icon2 {
+    width: 20px;
+    height: 20px;
+    stroke: #333;
 }
 
-/* ===== Buttons ===== */
-.btn-primary {
-  background-color: #3b82f6;
-  color: white;
-  padding: 0.75rem 1.25rem;
-  border: none;
-  border-radius: 0.375rem;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  margin-top: 1rem;
+/* Popular Stocks */
+.Pupoular_Stock p {
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
-.btn-primary:hover {
-  background-color: #2563eb;
+.Stock_btns button {
+    margin: 5px;
+    padding: 8px 12px;
+    background-color: #eee;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.icon {
-  width: 20px;
-  height: 20px;
+.Stock_btns button:hover {
+    background-color: #dcdcdc;
+    transform: scale(1.05);
 }
 
-/* ===== Inputs ===== */
-input[type="text"] {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  font-size: 1rem;
-  margin-top: 0.5rem;
+/* Welcome Section */
+.wel_content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
 }
 
-/* ===== Chart ===== */
-.chart-container {
-  position: relative;
-  height: 300px;
+.wel_content p {
+    color: #555;
+}
+
+/* Loading */
+.loading-content {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Error */
+.error-content {
+    color: #e74c3c;
+    text-align: center;
+}
+
+/* Stock Tracker */
+.stock-info h2 {
+    font-size: 2rem;
+}
+
+.stock-price {
+    margin-top: 10px;
+}
+
+#priceChange {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #2ecc71;
+}
+
+.change-arrow {
+    width: 16px;
+    height: 16px;
+    stroke: #2ecc71;
+}
+
+/* Real-time section */
+.real-time {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+/* Chart Section */
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.chart-header select {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.chart-content canvas {
+    width: 100%;
+    height: auto;
+    margin-top: 15px;
 }
 
 .chart-legend {
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
 }
 
 .legend-color {
-  width: 12px;
-  height: 12px;
-  background-color: #3b82f6;
-  border-radius: 3px;
+    width: 15px;
+    height: 15px;
+    background-color: #3498db;
+    margin-right: 10px;
+    border-radius: 3px;
 }
 
-/* ===== Metric Styles ===== */
+/* Metrics */
 .metric-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
 }
 
-.metric-value {
-  font-weight: bold;
+.metric-content:first-child {
+    border-top: none;
 }
 
 .metric-icon {
-  width: 20px;
-  height: 20px;
-  stroke: #6b7280;
+    width: 20px;
+    height: 20px;
+    stroke: #888;
 }
 
-/* Positive / Negative Arrows */
-.positive .metric-icon,
-.positive .change-arrow {
-  stroke: #10b981;
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.negative .metric-icon,
-.negative .change-arrow {
-  stroke: #ef4444;
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.015);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
-/* ===== Loading Spinner ===== */
-.spinner {
-  width: 48px;
-  height: 48px;
-  border: 3px solid #e5e7eb;
-  border-top: 3px solid #3b82f6;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 1rem;
-}
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .Searching input {
+        width: 100%;
+    }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+    .btn {
+        width: 100%;
+        margin-top: 10px;
+    }
 
-/* ===== Responsive Layout ===== */
-@media (max-width: 768px) {
-  .header-content {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
-/*these changes are to be applied to original html file */
