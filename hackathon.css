@@ -4,32 +4,40 @@
     box-sizing: border-box;
 }
 main{
-    padding: 70px;
+    padding: 30px;
+
 }
 body{
-    background-color: rgb(207, 230, 243);
+    background-color:rgba(240, 239, 239, 0.356);
     line-height: 1.5;  
+    
 }
 .icon{
     height: 3.5rem;width: 3.5rem;
 }
 header{
-    height: 60px;
-    width: 100vw;
-    background-color: white;
+
+    height: 90px;
+    width: 100%;
+    background-color: black;
+
 }
 
 .heading{
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content:space-around;
+    
 }
 .leftheading{
     display: flex;
     flex-direction: row;
      justify-content: space-around;
-    
+     align-items: center;
+    color: white;
     gap: 10px;
+    font-family:Calibri;
+    margin: 15px;
 }
  .blink {
             width: 8px;
@@ -53,18 +61,28 @@ header{
     margin: 10px;
     gap: 20px;
     font-size: 20px;
+    color: white;
+     font-family: Calibri;
 }
 
 
 .searchcard {
-    /* margin: 20px; */
+    margin: 20px; 
             background: white;
             border-radius: 0.5rem;
             border: 1px solid #e5e7eb;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
             padding: 1.5rem;
-            width: 1150px;
+            width: 1250px;
+            box-shadow: 5px 5px 10px black;
+            transition: all 1s ease;
+        
         }
+.searchcard:hover{
+    border-color: rgb(0, 0,255);
+    box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+    transform: scale(1.05);
+}
 .search_icon {
             position: absolute;
             right: 0.75rem;
@@ -76,7 +94,7 @@ header{
         }
 input{
     height: 40px;
-    width: 950px;
+    width: 1065px;
     border: solid black 1px;
     border-radius: 0.375rem;
 }
@@ -96,19 +114,26 @@ input{
     flex-direction: row;
     gap: 5px;
 }
+
+.searchbar input{
+    padding: 10px;
+}
 .search_stock placeholder{
     padding-left: 5px;
+    
 }
 .btn {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            background: #3b82f6;
+            background: blue;
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
             border-radius: 0.375rem;
-            font-size: 1rem;
+
+            font-size: 3rem;
+
             font-weight: 500;
             cursor: pointer;
             transition: background-color 0.15s ease-in-out;
@@ -144,7 +169,7 @@ input{
 
         .stock-btn:hover { background: #e5e7eb; }
         .stock-btn.active {
-            background: #3b82f6;
+            background: red;
             color: white;
             border-color: #3b82f6;
         }
@@ -162,9 +187,18 @@ input{
             border-radius: 0.5rem;
             border: 1px solid #e5e7eb;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+
             padding: 1.5rem;
-            width: 1150px;
+            width: 1250px;
+
+             box-shadow: 5px 5px 10px black;
+             transition: all 1s ease;
         }
+   .loadingcard:hover{
+    border-color: rgb(0, 0,255);
+    box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+    transform: scale(1.05);
+} 
     .loading-content {
             text-align: center;
             padding: 2rem 0;
@@ -180,12 +214,18 @@ input{
             background: white;
             border-radius: 0.5rem;
             border: 1px solid #e5e7eb;
+
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
             padding: 1.5rem;
-            width: 1150px;
-       
+            width: 1250px;
+        box-shadow: 5px 5px 10px black;
+        transition: all 1s ease;
  }
-
+.welcomecard:hover{
+    border-color: rgb(0, 0,255);
+    box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+    transform: scale(1.05);
+}
  .search_icon3{
     height: 5rem;
     width: 5rem;
@@ -218,6 +258,13 @@ input{
             padding: 1.5rem;
             width: 800px;
             height: 150px;
+             box-shadow: 5px 5px 10px black;
+             transition: all 1s ease;
+}
+.main-stock-card:hover{
+    border-color: rgb(0, 0,255);
+    box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+    transform: scale(1.05);
 }
 .change-arrow { width: 1rem; height: 1rem; }
         .price-change.positive { color: #059669; }
@@ -234,6 +281,14 @@ input{
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
             padding: 1.5rem;
             width: 400px;
+             box-shadow: 5px 5px 10px black;
+             transition: all 1s ease;
+}
+.today-card:hover{
+    border-color: rgb(0, 0,255);
+    box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+    transform: scale(1.05);
+
 }
 .fullrange{
     display: flex;
@@ -254,7 +309,13 @@ input{
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
             padding: 1.5rem;
             width: 400px;
-
+             box-shadow: 5px 5px 10px black;
+transition: all 1s ease;
+}
+.volume-card:hover{
+    border-color: rgb(0, 0,255);
+    box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+    transform: scale(1.05);
 }
 .fullvolume{
     display: flex;
@@ -286,14 +347,22 @@ input{
 }
 
 .chart-card {
-    /* margin: 20px; */
+     margin: 30px; 
             background: white;
             border-radius: 0.5rem;
             border: 1px solid #e5e7eb;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
             padding: 1.5rem;
-            width: 1150px;
+            width: 1250px;
+             box-shadow: 5px 5px 10px black;
+             margin-bottom: 1.5rem;
+          transition: all 1s ease;
  }
+ .chart-card:hover{
+    border-color: rgb(0, 0,255);
+    box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+    transform: scale(1.05);
+}
 .chart{
     display: flex;
     flex-direction: row;
@@ -309,7 +378,7 @@ input{
     flex-direction: row;
     justify-content: center;
 }
-.chart-card { margin-bottom: 1.5rem; }
+
 
         .chart-header {
             display: flex;
@@ -374,6 +443,14 @@ input{
             width: 265px;
             height: 80px;
             font-size: 20px;
+             box-shadow: 5px 5px 10px black;
+             margin: 30px;
+             transition: all 1s ease;
+}
+.metric-card:hover{
+    border-color: rgb(0, 0,255);
+    box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+    transform: scale(1.05);
 }
 .metrics-class{
     display: flex;
@@ -408,6 +485,21 @@ input{
             border: 1px solid #e5e7eb;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
             padding: 1.5rem;
-            width: 1150px;
+            width: 1250px;
             color: #dc2626;
+             box-shadow: 5px 5px 10px black;
+             margin: 30px;
+             transition: all 1s ease;
+}
+.error-card:hover{
+    border-color: red;
+    box-shadow: 0 0 10px  rgb(187, 22, 22),0 0 20px rgb(235, 235, 241);
+    transform: scale(1.05);
+}
+
+#timerange{
+    height: 30px;
+    width: 150px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px black;
 }
