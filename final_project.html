@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockTracker</title>
+    <link rel="shortcut icon" href="stocklogo.png" type="image/x-icon">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        main{
+            padding: 30px;
+        }
+        body{
+            background-color:rgba(240, 239, 239, 0.356);
+            line-height: 1.5;  
+        }
+        .icon{
+            height: 3.5rem;width: 3.5rem;
+        }
+        header{
+            height: 90px;
+            width: 100%;
+            background-color: black;
+        }
+
+        .heading{
+            display: flex;
+            flex-direction: row;
+            justify-content:space-around;
+            flex-wrap: wrap;
+        }
+        .leftheading{
+            display: flex;
+            flex-direction: row;
+             justify-content: space-around;
+             align-items: center;
+             flex-wrap: wrap;
+            color: white;
+            gap: 10px;
+            font-family:Calibri;
+            margin: 15px;
+        }
+         .blink {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            animation-name: blink;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+        }
+
+         @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+        .rightheading{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 10px;
+            gap: 20px;
+            font-size: 20px;
+            color: white;
+             font-family: Calibri;
+        }
+
+
+        .searchcard {
+            margin: 20px; 
+            background: white;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            width: 1250px;
+            box-shadow: 5px 5px 10px black;
+            transition: all 1s ease;
+        }
+        .searchcard:hover{
+            border-color: rgb(0, 0,255);
+            box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+            transform: scale(1.05);
+        }
+        .search_icon {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1rem;
+            height: 1rem;
+            color: #9ca3af;
+        }
+        input{
+            height: 40px;
+            width: 1065px;
+            border: solid black 1px;
+            border-radius: 0.375rem;
+        }
+        .Search{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-size: 20px;
+        }
+        .Searching{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .searchbar{
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .searchbar input{
+            padding: 10px;
+        }
+        .search_stock placeholder{
+            padding-left: 5px;
+        }
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: blue;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-size: 3rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.15s ease-in-out;
+            white-space: nowrap;
+        }
+        .btn:hover { background: #2563eb; }
+
+        #popular-stocks { margin-top: 1rem; }
+        .popular-stocks label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .stock-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 9999px;
+            background: #f3f4f6;
+            color: #374151;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.15s linear;
+        }
+
+        .stock-btn:hover { background: #e5e7eb; }
+        .stock-btn.active {
+            background: red;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+
+        .Loading{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            font-size: 20px;
+            flex-wrap: wrap;
+        }
+        .loadingcard {
+            margin: 30px;
+            background: white;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            width: 1250px;
+            box-shadow: 5px 5px 10px black;
+            transition: all 1s ease;
+        }
+        .loadingcard:hover{
+            border-color: rgb(0, 0,255);
+            box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+            transform: scale(1.05);
+        } 
+        .loading-content {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .loading-content p {
+            color: #6b7280; 
+        }
+
+
+        .welcomecard {
+            margin: 30px;
+            background: white;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            width: 1250px;
+            box-shadow: 5px 5px 10px black;
+            transition: all 1s ease;
+        }
+        .welcomecard:hover{
+            border-color: rgb(0, 0,255);
+            box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+            transform: scale(1.05);
+        }
+        .search_icon3{
+            height: 5rem;
+            width: 5rem;
+            color: #9ca3af;
+        }
+        .wel_content{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .Welcome{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stocktracker{
+            display: flex;
+            flex-direction: row;
+        }
+        .main-stock-card{
+            margin: 30px;
+            background: white;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            width: 800px;
+            height: 150px;
+            box-shadow: 5px 5px 10px black;
+            transition: all 1s ease;
+        }
+        .main-stock-card:hover{
+            border-color: rgb(0, 0,255);
+            box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+            transform: scale(1.05);
+        }
+        .change-arrow { width: 1rem; height: 1rem; }
+        .price-change.positive { color: #059669; }
+        .price-change.negative { color: #dc2626; }
+        .leftcol{
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+        .today-card{
+            margin: 30px;
+            background: white;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            width: 400px;
+            box-shadow: 5px 5px 10px black;
+            transition: all 1s ease;
+        }
+        .today-card:hover{
+            border-color: rgb(0, 0,255);
+            box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+            transform: scale(1.05);
+        }
+        .fullrange{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .rnumber{
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+        .volume-card{
+            margin: 30px;
+            background: white;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            width: 400px;
+            box-shadow: 5px 5px 10px black;
+            transition: all 1s ease;
+        }
+        .volume-card:hover{
+            border-color: rgb(0, 0,255);
+            box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+            transform: scale(1.05);
+        }
+        .fullvolume{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .vnumber{
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+        .insidemain{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .real-time{
+            display: flex;
+            flex-direction: row;
+            margin-top: 30px;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .stock-price{
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+
+        .chart-card {
+            margin: 30px; 
+            background: white;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            width: 1250px;
+            box-shadow: 5px 5px 10px black;
+            margin-bottom: 1.5rem;
+            transition: all 1s ease;
+        }
+        .chart-card:hover{
+            border-color: rgb(0, 0,255);
+            box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+            transform: scale(1.05);
+        }
+        .chart{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .chart-header{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .chart-legend{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .chart-controls {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .chart-controls select {
+            padding: 0.25rem 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 320px;
+            margin-bottom: 1rem;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        } 
+
+        .legend-color {
+            width: 12px;
+            height: 2px;
+            background: #3b82f6;
+        }
+
+        .metric-card{
+            background: white;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            width: 265px;
+            height: 80px;
+            font-size: 20px;
+            box-shadow: 5px 5px 10px black;
+            margin: 30px;
+            transition: all 1s ease;
+        }
+        .metric-card:hover{
+            border-color: rgb(0, 0,255);
+            box-shadow: 0 0 10px  rgb(0, 0,255),0 0 20px rgb(235, 235, 241);
+            transform: scale(1.05);
+        }
+        .metrics-class{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            justify-content: space-evenly;
+        }
+        .metric-icon{
+            width: 30px;
+            height: 30px;
+            color: #9ca3af;
+        }
+        #metric-icon-open{
+            height: 40px;
+            width: 40px;
+        }
+        .metrics{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .Error{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .error-card{
+            background: rgb(250, 226, 226);
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            width: 1250px;
+            color: #dc2626;
+            box-shadow: 5px 5px 10px black;
+            margin: 30px;
+            transition: all 1s ease;
+        }
+        .error-card:hover{
+            border-color: red;
+            box-shadow: 0 0 10px  rgb(187, 22, 22),0 0 20px rgb(235, 235, 241);
+            transform: scale(1.05);
+        }
+
+        #timerange{
+            height: 30px;
+            width: 150px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px black;
+        }
+
+        /* Hide sections initially */
+        .Stock_tracker, .Loading, .Error {
+            display: none;
+        }
+
+        /* Popular stocks buttons container */
+        #Stock_btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Loading spinner */
+        .loading-icon {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+    <div class="heading">
+        <div class="leftheading">
+      <div>  <svg class="icon" id="mainicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points=" 2,12 6,12 10,6 14,18 18,12 22,12" style="color: blue;"></polyline>
+                    </svg></div>
+      <div>  <h1>Stock Tracker</h1></div>
+        </div>
+
+        <div class="rightheading">
+        <div id="blink" class="blink"></div>
+       <div><p class="live_data">Live Data   </p></div> 
+       <div> <p class="last_update">Last updated <span id="last-update">--/--/--</span></p></div> 
+        </div>
+    </div>
+    </header>
+
+    <main>
+        <section class="Search">
+            <div class="searchcard">
+            <div class="Searching">
+            <div><label for="search_stock" style="font-family:Calibri; font-size: 1.3rem;"><strong>Search Stock Symbol</strong></label></div>
+           <div class="searchbar"> 
+           <div> <input type="text" id="search_stock" placeholder="Enter symbol (eg. AAPL, GOOGL, MSFT)" style="font-size: 1.1rem;"></div>
+         <div> <button class="btn" style="font-family:Calibri; font-size: 1rem ;" >
+                 <svg class="search_icon2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="10" cy="10" r="8"></circle>
+                <line x1="16" y1="16" x2="21" y2="21" />
+            </svg>
+                <p style="font-size: 1rem;">Track Stock</p></button></div> 
+        </div>
+
+            <p id="popular-stocks" style="font-family:Calibri; font-size: 1.3rem;"><strong>Popular Stocks</strong></p>
+            <div class="stock-btn" id="Stock_btns">
+                <!-- JS -->
+            </div>
+        </div>
+        </div>
+        </section>
+
+        <section class="Stock_tracker">
+         <div class="stocktracker">   
+            <div class="main-stock-card">
+        <div class="insidemain">
+                <div class="stock-info">
+                    <h2 id="Stock-symbol" style="font-family: Calibri;color: black;">--</h2>
+                    <p id="Stock-name" style="font-family: Calibri;  color: grey;">--</p>
+                </div>
+
+                <div class="stock-price">
+                    <h2 id="current-price" style="font-family: Calibri; font-size: 25px; color: black;">$0.00</h2>
+                    <div class="price-change" id="priceChange">
+                        <svg class="change-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="18,15 12,9 6,15"></polyline>
+                        </svg>
+                        <span style="font-family: Calibri;">+0.00 (+0.00%)</span>
+                    </div>
+                </div>
+            </div>
+                <div class="real-time">
+                    <div class="blink" id="blink"></div>
+                    <p style="font-family: Calibri; font-size: 18px; color: grey;">Real-time   • Last Trade: <span id="last-trade-time">--/--/--</span></p>
+                </div>
+            </div>
+            <div class="leftcol">
+                <div class="today-card">
+                    <h3 style="font-family: Calibri; font-size: 18px; color:black;">Today's Range</h3>
+                    <div class="fullrange">
+                    <div class="today-content">
+                        <p style="font-family: Calibri; font-size: 18px; color: grey;">Low  </p>
+                        <p style="font-family: Calibri; font-size: 18px; color: grey;">High </p>
+                    </div>
+                    <div class="rnumber">
+                    <span id="daylow" style="font-family: Calibri; font-size: 18px; color: black;">$0.00</span>
+                    <span id="dayhigh" style="font-family: Calibri; font-size: 18px; color: black;">$0.00</span>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="volume-card">
+                    <h3 style="font-family: Calibri; font-size: 18px; color: black;">Volume & Market Cap</h3>
+                    <div class="fullvolume">
+                    <div class="volume-content">
+                        <p style="font-family: Calibri; font-size: 18px; color: grey;">Volume  </p>
+                        <p style="font-family: Calibri; font-size: 18px; color: grey;">Market Cap </p>
+                    </div>
+                  <div class="vnumber">  <p id="volume" style="font-family: Calibri; font-size: 18px; color: black;">0</p>
+                    <p id="marketcap" style="font-family: Calibri; font-size: 18px; color: black;">N/A</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="chart">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h2 style="font-family: Calibri; font-size: 25px; color: black;">Price Chart</h2>
+                      <div>  <label for="timerange" style="font-family: Calibri; font-size: 18px; color: black;">Time range: </label>
+                        <select name="timerange" id="timerange">
+                            <option value="1" style="font-family: Calibri; font-size: 18px; color: black;">1 Day</option>
+                            <option value="2" style="font-family: Calibri; font-size: 18px; color: black;">5 Days</option>
+                            <option value="3" style="font-family: Calibri; font-size: 18px; color: black;">1 Month</option>
+                            <option value="4" style="font-family: Calibri; font-size: 18px; color: black;">3 Months</option>
+                            <option value="5" style="font-family: Calibri; font-size: 18px; color: black;">1 Year</option>
+                        </select></div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color"></div>
+                            <span style="font-family: Calibri; font-size: 18px; color: black;">Stock Price</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metrics-class">
+                <div class="metric-card">
+                    <div class="metrics">
+                    <div class="metric-content">
+                        <p style="font-family: Calibri; font-size: 18px; color: black;"><strong>Previous Close</strong></p>
+                        <span id="previousClose" style="font-family: Calibri; font-size: 20px; color: black;">$0.00</span>
+                        </div>
+                      <div> <svg class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <polyline points="16,13 11,11 11,6"></polyline>
+                        </svg> 
+                    </div> 
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metrics">
+                    <div class="metric-content">
+                        <p style="font-family: Calibri; font-size: 18px; color: black;"><strong>Open</strong></p>
+                        <span id="open" style="font-family: Calibri; font-size: 20px; color: black;">$0.00</span>
+                        </div>
+                     <div>  <svg class="metric-icon" id="metric-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="10,10 10,20 15,15 10,10"></polygon>
+                        </svg> </div> 
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metrics">
+                    <div class="metric-content">
+                        <p style="font-family: Calibri; font-size: 18px; color: black;"><strong>52W High</strong></p>
+                        <span id="fiftyTwoWeekHigh" style="font-family: Calibri; font-size: 20px; color: black;">$0.00</span>
+                        </div>
+
+                       <div> <svg style="color: green;" class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="18,15 12,9 6,15 "></polyline>
+                        </svg> 
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metrics">
+                    <div class="metric-content">
+                        <p style="font-family: Calibri; font-size: 18px; color: black;"><strong>52W Low</strong></p>
+                        <span id="fiftyTwoWeekLow" style="font-family: Calibri; font-size: 20px; color: black;">$0.00</span>
+                        </div>
+                     <div>   <svg style="color: red;" class="metric-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6,10 12,16 18,10"></polyline>
+                        </svg>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="Welcome">
+            <div class="welcomecard">
+            <div class="wel_content">
+                  <svg class="search_icon3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="2,12 6,12 10,6 14,18 18,12 22,12"></polyline>
+                  </svg>
+                 <h2 style="font-family: Calibri; font-size: 30px;">Welcome to Stock Tracker</h2>
+                 <p style="font-family: Calibri; font-size: 20px;">Search for a stock symbol above to view real-time market data, charts, and key financial metrics.</p>
+            </div>
+            </div>
+        </section>
+         <section class="Loading">
+            <div class="loadingcard">
+            <div class="loading-content">
+                <div class="loading-icon"></div>
+               <p style="font-family: Calibri; font-size: 25px; color: black;">Fetching real time data....</p> 
+            </div>
+            </div>
+        </section>
+
+         <section class="Error">
+            <div class="error-card">
+                <div class="error-content">
+                    <h2 style="color: brown; font-family: Calibri;">Unable to fetch stock data.</h2>
+                    <p style="font-family: Calibri;" id="error-message">400: {"message":"No data available for this symbol"}</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // DOM Elements
+        const searchInput = document.getElementById('search_stock');
+        const trackButton = document.querySelector('.btn');
+        const welcomeSection = document.querySelector('.Welcome');
+        const loadingSection = document.querySelector('.Loading');
+        const stockTrackerSection = document.querySelector('.Stock_tracker');
+        const errorSection = document.querySelector('.Error');
+        const popularStocksContainer = document.getElementById('Stock_btns');
+        
+        // Stock data elements
+        const stockSymbolElement = document.getElementById('Stock-symbol');
+        const stockNameElement = document.getElementById('Stock-name');
+        const currentPriceElement = document.getElementById('current-price');
+        const priceChangeElement = document.getElementById('priceChange');
+        const dayLowElement = document.getElementById('daylow');
+        const dayHighElement = document.getElementById('dayhigh');
+        const volumeElement = document.getElementById('volume');
+        const marketCapElement = document.getElementById('marketcap');
+        const previousCloseElement = document.getElementById('previousClose');
+        const openElement = document.getElementById('open');
+        const fiftyTwoWeekHighElement = document.getElementById('fiftyTwoWeekHigh');
+        const fiftyTwoWeekLowElement = document.getElementById('fiftyTwoWeekLow');
+        const lastTradeTimeElement = document.getElementById('last-trade-time');
+        const lastUpdateElement = document.getElementById('last-update');
+        const errorMessageElement = document.getElementById('error-message');
+        
+        // Chart elements
+        const timeRangeSelect = document.getElementById('timerange');
+        const priceChartCanvas = document.getElementById('priceChart');
+        let priceChart = null;
+        
+        // Popular stocks
+        const popularStocks = [
+            { symbol: 'AAPL', name: 'Apple Inc.' },
+            { symbol: 'MSFT', name: 'Microsoft Corporation' },
+            { symbol: 'GOOGL', name: 'Alphabet Inc.' },
+            { symbol: 'AMZN', name: 'Amazon.com Inc.' },
+            { symbol: 'META', name: 'Meta Platforms Inc.' },
+            { symbol: 'TSLA', name: 'Tesla Inc.' },
+            { symbol: 'NVDA', name: 'NVIDIA Corporation' },
+            { symbol: 'JPM', name: 'JPMorgan Chase & Co.' }
+        ];
+        
+        // Initialize the app
+        function init() {
+            // Set current date
+            updateDateTime();
+            
+            // Create popular stock buttons
+            createPopularStockButtons();
+            
+            // Set up event listeners
+            trackButton.addEventListener('click', trackStock);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    trackStock();
+                }
+            });
+            timeRangeSelect.addEventListener('change', updateChartTimeRange);
+            
+            // Show welcome section by default
+            showSection('welcome');
+        }
+        
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            const formattedDate = now.toLocaleDateString('en-US', options);
+            lastUpdateElement.textContent = formattedDate;
+        }
+        
+        // Create popular stock buttons
+        function createPopularStockButtons() {
+            popularStocks.forEach(stock => {
+                const button = document.createElement('button');
+                button.className = 'stock-btn';
+                button.textContent = stock.symbol;
+                button.addEventListener('click', () => {
+                    searchInput.value = stock.symbol;
+                    trackStock();
+                });
+                popularStocksContainer.appendChild(button);
+            });
+        }
+        
+        // Show a specific section and hide others
+        function showSection(section) {
+            welcomeSection.style.display = 'none';
+            loadingSection.style.display = 'none';
+            stockTrackerSection.style.display = 'none';
+            errorSection.style.display = 'none';
+            
+            switch(section) {
+                case 'welcome':
+                    welcomeSection.style.display = 'flex';
+                    break;
+                case 'loading':
+                    loadingSection.style.display = 'flex';
+                    break;
+                case 'stock':
+                    stockTrackerSection.style.display = 'block';
+                    break;
+                case 'error':
+                    errorSection.style.display = 'flex';
+                    break;
+            }
+        }
+        
+        // Track stock function
+        async function trackStock() {
+            const symbol = searchInput.value.trim().toUpperCase();
+            
+            if (!symbol) {
+                alert('Please enter a stock symbol');
+                return;
+            }
+            
+            showSection('loading');
+            
+            try {
+                // Fetch stock data (using mock data for this example)
+                const stockData = await fetchStockData(symbol);
+                
+                if (stockData.error) {
+                    showError(stockData.error);
+                    return;
+                }
+                
+                // Update UI with stock data
+                updateStockUI(stockData);
+                
+                // Show stock section
+                showSection('stock');
+                
+                // Initialize chart
+                initializeChart(stockData.historicalData);
+                
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+        
+        // Mock API function to fetch stock data
+        async function fetchStockData(symbol) {
+            // In a real app, you would fetch from a real API like Alpha Vantage, Yahoo Finance, etc.
+            // This is a mock implementation for demonstration
+            
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Check if symbol is in our popular stocks
+            const popularStock = popularStocks.find(stock => stock.symbol === symbol);
+            
+            if (!popularStock && symbol !== 'MOCK') {
+                return { 
+                    error: `No data available for symbol: ${symbol}` 
+                };
+            }
+            
+            // Generate mock data
+            const basePrice = Math.random() * 100 + 50;
+            const priceChange = (Math.random() - 0.5) * 10;
+            const percentChange = (priceChange / basePrice) * 100;
+            const dayLow = basePrice - Math.random() * 5;
+            const dayHigh = basePrice + Math.random() * 5;
+            const volume = Math.floor(Math.random() * 10000000) + 1000000;
+            const marketCap = Math.floor(Math.random() * 1000000000000) + 1000000000;
+            
+            // Generate historical data for chart
+            const historicalData = [];
+            const now = new Date();
+            const days = 30; // 1 month of data
+            
+            for (let i = days; i >= 0; i--) {
+                const date = new Date(now);
+                date.setDate(date.getDate() - i);
+                
+                // Simulate price movement
+                const price = basePrice + (Math.random() - 0.5) * 10;
+                
+                historicalData.push({
+                    date: date.toLocaleDateString(),
+                    price: parseFloat(price.toFixed(2))
+                });
+            }
+            
+            return {
+                symbol,
+                name: popularStock ? popularStock.name : `${symbol} Company Inc.`,
+                price: parseFloat((basePrice + priceChange).toFixed(2)),
+                change: parseFloat(priceChange.toFixed(2)),
+                percentChange: parseFloat(percentChange.toFixed(2)),
+                dayLow: parseFloat(dayLow.toFixed(2)),
+                dayHigh: parseFloat(dayHigh.toFixed(2)),
+                volume: volume.toLocaleString(),
+                marketCap: marketCap.toLocaleString(),
+                previousClose: parseFloat(basePrice.toFixed(2)),
+                open: parseFloat((basePrice + (Math.random() - 0.5) * 2).toFixed(2)),
+                fiftyTwoWeekHigh: parseFloat((basePrice + Math.random() * 20).toFixed(2)),
+                fiftyTwoWeekLow: parseFloat((basePrice - Math.random() * 20).toFixed(2)),
+                lastTradeTime: new Date().toLocaleTimeString(),
+                historicalData
+            };
+        }
+        
+        // Update stock UI with data
+        function updateStockUI(data) {
+            stockSymbolElement.textContent = data.symbol;
+            stockNameElement.textContent = data.name;
+            currentPriceElement.textContent = `$${data.price}`;
+            
+            // Update price change
+            const isPositive = data.change >= 0;
+            const arrowPoints = isPositive ? "18,15 12,9 6,15" : "6,10 12,16 18,10";
+            
+            priceChangeElement.innerHTML = `
+                <svg class="change-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="${arrowPoints}"></polyline>
+                </svg>
+                <span style="font-family: Calibri;">${isPositive ? '+' : ''}${data.change} (${isPositive ? '+' : ''}${data.percentChange}%)</span>
+            `;
+            
+            priceChangeElement.className = isPositive ? 'price-change positive' : 'price-change negative';
+            
+            // Update other fields
+            dayLowElement.textContent = `$${data.dayLow}`;
+            dayHighElement.textContent = `$${data.dayHigh}`;
+            volumeElement.textContent = data.volume;
+            marketCapElement.textContent = `$${data.marketCap}`;
+            previousCloseElement.textContent = `$${data.previousClose}`;
+            openElement.textContent = `$${data.open}`;
+            fiftyTwoWeekHighElement.textContent = `$${data.fiftyTwoWeekHigh}`;
+            fiftyTwoWeekLowElement.textContent = `$${data.fiftyTwoWeekLow}`;
+            lastTradeTimeElement.textContent = data.lastTradeTime;
+            
+            // Update last updated time
+            updateDateTime();
+        }
+        
+        // Show error message
+        function showError(message) {
+            errorMessageElement.textContent = message;
+            showSection('error');
+        }
+        
+        // Initialize chart
+        function initializeChart(historicalData) {
+            const ctx = priceChartCanvas.getContext('2d');
+            
+            // Destroy previous chart if it exists
+            if (priceChart) {
+                priceChart.destroy();
+            }
+            
+            // Prepare chart data
+            const labels = historicalData.map(data => data.date);
+            const prices = historicalData.map(data => data.price);
+            
+            // Determine line color based on price trend
+            const lineColor = prices[0] <= prices[prices.length - 1] ? '#059669' : '#dc2626';
+            
+            priceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Stock Price',
+                        data: prices,
+                        borderColor: lineColor,
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: false
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    }
+                }
+            });
+        }
+        
+        // Update chart time range
+        function updateChartTimeRange() {
+            // In a real app, this would fetch new data based on the selected range
+            // For this demo, we'll just log the selection
+            const range = timeRangeSelect.value;
+            console.log(`Time range changed to: ${timeRangeSelect.options[range-1].text}`);
+        }
+        
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
