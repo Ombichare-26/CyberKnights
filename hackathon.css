@@ -5,14 +5,16 @@
 }
 main{
     padding: 30px;
-
+  
 }
 body{
     background-color:rgba(240, 239, 239, 0.356);
     line-height: 1.5;  
-    
-}
+    }
+
+
 .icon{
+
     height: 3.5rem;width: 3.5rem;
 }
 header{
@@ -28,13 +30,14 @@ header{
     flex-direction: row;
     justify-content:space-around;
     flex-wrap: wrap;
+    
 }
 .leftheading{
     display: flex;
     flex-direction: row;
      justify-content: space-around;
      align-items: center;
-     flex-wrap: wrap;
+     
     color: white;
     gap: 10px;
     font-family:Calibri;
@@ -529,3 +532,6 @@ transition: all 1s ease;
     border-radius: 5px;
     box-shadow: 2px 2px 5px black;
 }
+
+
+
