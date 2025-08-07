@@ -14,6 +14,7 @@ const currentPriceElement = document.getElementById('current-price');
 const priceChangeElement = document.getElementById('priceChange');
 const dayLowElement = document.getElementById('daylow');
 const dayHighElement = document.getElementById('dayhigh');
+
 const volumeElement = document.getElementById('volume');
 const marketCapElement = document.getElementById('marketcap');
 const previousCloseElement = document.getElementById('previousClose');
@@ -413,3 +414,4 @@ function updateChartTimeRange() {
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', init);
+
