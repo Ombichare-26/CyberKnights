@@ -1,3 +1,4 @@
+const API_KEY = 'A8UR2M94YFY4VD51'; 
 const searchInput = document.getElementById('search_stock');
 const trackButton = document.querySelector('.btn');
 const welcomeSection = document.querySelector('.Welcome');
@@ -13,7 +14,6 @@ const currentPriceElement = document.getElementById('current-price');
 const priceChangeElement = document.getElementById('priceChange');
 const dayLowElement = document.getElementById('daylow');
 const dayHighElement = document.getElementById('dayhigh');
-
 const volumeElement = document.getElementById('volume');
 const marketCapElement = document.getElementById('marketcap');
 const previousCloseElement = document.getElementById('previousClose');
@@ -41,11 +41,9 @@ const popularStocks = [
     { symbol: 'JPM', name: 'JPMorgan Chase & Co.' }
 ];
 
-
 function init() {
     console.log('Initializing Stock Tracker App...');
     
-
     const requiredElements = [
         { name: 'searchInput', element: searchInput },
         { name: 'trackButton', element: trackButton },
@@ -62,36 +60,17 @@ function init() {
         }
     });
     
-    // Set current date
     updateDateTime();
-    
-    // Create popular stock buttons
     createPopularStockButtons();
     
-    // Set up event listeners
-    if (trackButton) {
-        trackButton.addEventListener('click', trackStock);
-    }
+    if (trackButton) trackButton.addEventListener('click', trackStock);
+    if (searchInput) searchInput.addEventListener('keypress', (e) => e.key === 'Enter' && trackStock());
+    if (timeRangeSelect) timeRangeSelect.addEventListener('change', updateChartTimeRange);
     
-    if (searchInput) {
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                trackStock();
-            }
-        });
-    }
-    
-    if (timeRangeSelect) {
-        timeRangeSelect.addEventListener('change', updateChartTimeRange);
-    }
-    
-    // Show welcome section by default
     showSection('welcome');
-    
     console.log('App initialization completed');
 }
 
-// Update date and time
 function updateDateTime() {
     const now = new Date();
     const options = {
@@ -102,12 +81,9 @@ function updateDateTime() {
         minute: '2-digit'
     };
     const formattedDate = now.toLocaleDateString('en-US', options);
-    if (lastUpdateElement) {
-        lastUpdateElement.textContent = formattedDate;
-    }
+    if (lastUpdateElement) lastUpdateElement.textContent = formattedDate;
 }
 
-// Create popular stock buttons
 function createPopularStockButtons() {
     if (!popularStocksContainer) return;
     
@@ -123,31 +99,18 @@ function createPopularStockButtons() {
     });
 }
 
-// Show a specific section and hide others
 function showSection(section) {
     const sections = [welcomeSection, loadingSection, stockTrackerSection, errorSection];
-    
-    sections.forEach(sec => {
-        if (sec) sec.style.display = 'none';
-    });
+    sections.forEach(sec => sec && (sec.style.display = 'none'));
 
     switch(section) {
-        case 'welcome':
-            if (welcomeSection) welcomeSection.style.display = 'flex';
-            break;
-        case 'loading':
-            if (loadingSection) loadingSection.style.display = 'flex';
-            break;
-        case 'stock':
-            if (stockTrackerSection) stockTrackerSection.style.display = 'block';
-            break;
-        case 'error':
-            if (errorSection) errorSection.style.display = 'flex';
-            break;
+        case 'welcome': welcomeSection && (welcomeSection.style.display = 'flex'); break;
+        case 'loading': loadingSection && (loadingSection.style.display = 'flex'); break;
+        case 'stock': stockTrackerSection && (stockTrackerSection.style.display = 'block'); break;
+        case 'error': errorSection && (errorSection.style.display = 'flex'); break;
     }
 }
 
-// Track stock function
 async function trackStock() {
     const symbol = searchInput.value.trim().toUpperCase();
 
@@ -160,29 +123,21 @@ async function trackStock() {
     showSection('loading');
 
     try {
-        // Fetch stock data (using mock data for this example)
-        const stockData = await fetchStockData(symbol);
+        const [quoteData, historicalData] = await Promise.all([
+            fetchStockQuote(symbol),
+            fetchHistoricalData(symbol)
+        ]);
 
-        console.log('Received stock data:', stockData);
-
-        if (stockData && stockData.error) {
-            showError(stockData.error);
+        if (quoteData.error || !quoteData['Global Quote']) {
+            showError(quoteData.error || 'No data available for this symbol');
             return;
         }
 
-        if (!stockData) {
-            showError('Failed to fetch stock data');
-            return;
-        }
-
-        // Update UI with stock data
+        const stockData = processStockData(quoteData, historicalData, symbol);
         updateStockUI(stockData);
-
-        // Show stock section
         showSection('stock');
 
-        // Initialize chart
-        if (stockData.historicalData && stockData.historicalData.length > 0) {
+        if (stockData.historicalData) {
             initializeChart(stockData.historicalData);
         } else {
             console.warn('No historical data available for chart');
@@ -190,81 +145,63 @@ async function trackStock() {
 
     } catch (error) {
         console.error('Error tracking stock:', error);
-        showError(error.message);
+        showError(error.message || 'Failed to fetch stock data');
     }
 }
 
+async function fetchStockQuote(symbol) {
+    const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${API_KEY}`);
+    return await response.json();
+}
 
-async function fetchStockData(symbol) {
+async function fetchHistoricalData(symbol) {
+    const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&outputsize=compact&apikey=${API_KEY}`);
+    return await response.json();
+}
 
-
-   
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Check if symbol is in our popular stocks or allow any symbol
+function processStockData(quoteData, historicalData, symbol) {
+    const quote = quoteData['Global Quote'];
     const popularStock = popularStocks.find(stock => stock.symbol === symbol);
-
-    const basePrice = Math.random() * 100 + 50;
-    const priceChange = (Math.random() - 0.5) * 10;
-    const percentChange = (priceChange / basePrice) * 100;
-    const dayLow = basePrice - Math.random() * 5;
-    const dayHigh = basePrice + Math.random() * 5;
-    const volume = Math.floor(Math.random() * 10000000) + 1000000;
-    const marketCap = Math.floor(Math.random() * 1000000000000) + 1000000000;
-
-    // Generate historical data for chart
-    const historicalData = [];
-    const now = new Date();
-    const days = 30; // 1 month of data
-
-    for (let i = days; i >= 0; i--) {
-        const date = new Date(now);
-        date.setDate(date.getDate() - i);
-
-        // Simulate price movement
-        const price = basePrice + (Math.random() - 0.5) * 10;
-
-        historicalData.push({
-            date: date.toLocaleDateString(),
-            price: parseFloat(price.toFixed(2))
-        });
-    }
-
+    
+    // Process current quote data
     const stockData = {
         symbol,
-        name: popularStock ? popularStock.name : `${symbol} Company Inc.`,
-        price: parseFloat((basePrice + priceChange).toFixed(2)),
-        change: parseFloat(priceChange.toFixed(2)),
-        percentChange: parseFloat(percentChange.toFixed(2)),
-        dayLow: parseFloat(dayLow.toFixed(2)),
-        dayHigh: parseFloat(dayHigh.toFixed(2)),
-        volume: volume.toLocaleString(),
-        marketCap: marketCap.toLocaleString(),
-        previousClose: parseFloat(basePrice.toFixed(2)),
-        open: parseFloat((basePrice + (Math.random() - 0.5) * 2).toFixed(2)),
-        fiftyTwoWeekHigh: parseFloat((basePrice + Math.random() * 20).toFixed(2)),
-        fiftyTwoWeekLow: parseFloat((basePrice - Math.random() * 20).toFixed(2)),
-        lastTradeTime: new Date().toLocaleTimeString(),
-        historicalData
+        name: popularStock ? popularStock.name : `${symbol} Company`,
+        price: parseFloat(quote['05. price']),
+        change: parseFloat(quote['09. change']),
+        percentChange: parseFloat(quote['10. change percent'].replace('%', '')),
+        dayLow: parseFloat(quote['04. low']),
+        dayHigh: parseFloat(quote['03. high']),
+        volume: parseInt(quote['06. volume']).toLocaleString(),
+        previousClose: parseFloat(quote['08. previous close']),
+        open: parseFloat(quote['02. open']),
+        lastTradeTime: new Date().toLocaleTimeString()
     };
 
-    console.log('Generated stock data:', stockData);
+    // Process historical data if available
+    if (historicalData['Time Series (Daily)']) {
+        const timeSeries = historicalData['Time Series (Daily)'];
+        const dates = Object.keys(timeSeries).sort();
+        
+        stockData.historicalData = dates.map(date => ({
+            date,
+            price: parseFloat(timeSeries[date]['4. close'])
+        })).slice(-30); 
+    }
+
     return stockData;
 }
 
-// Update stock UI with data
 function updateStockUI(data) {
-    console.log('Updating UI with data:', data);
-
     if (!data) {
         console.error('No data provided to updateStockUI');
         return;
     }
 
-    // Safely update elements with null checks
+    // Update basic info
     if (stockSymbolElement) stockSymbolElement.textContent = data.symbol || '--';
     if (stockNameElement) stockNameElement.textContent = data.name || '--';
-    if (currentPriceElement) currentPriceElement.textContent = `$${data.price || '0.00'}`;
+    if (currentPriceElement) currentPriceElement.textContent = `$${data.price?.toFixed(2) || '0.00'}`;
 
     // Update price change
     const isPositive = (data.change || 0) >= 0;
@@ -275,131 +212,80 @@ function updateStockUI(data) {
             <svg class="change-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="${arrowPoints}"></polyline>
             </svg>
-            <span style="font-family: Calibri;">${isPositive ? '+' : ''}${data.change || '0.00'} (${isPositive ? '+' : ''}${data.percentChange || '0.00'}%)</span>
+            <span style="font-family: Calibri;">${isPositive ? '+' : ''}${data.change?.toFixed(2) || '0.00'} (${isPositive ? '+' : ''}${data.percentChange?.toFixed(2) || '0.00'}%)</span>
         `;
         priceChangeElement.className = isPositive ? 'price-change positive' : 'price-change negative';
     }
 
-    // Update other fields with null checks
-    if (dayLowElement) dayLowElement.textContent = `$${data.dayLow || '0.00'}`;
-    if (dayHighElement) dayHighElement.textContent = `$${data.dayHigh || '0.00'}`;
+    // Update other fields
+    if (dayLowElement) dayLowElement.textContent = `$${data.dayLow?.toFixed(2) || '0.00'}`;
+    if (dayHighElement) dayHighElement.textContent = `$${data.dayHigh?.toFixed(2) || '0.00'}`;
     if (volumeElement) volumeElement.textContent = data.volume || '0';
-    if (marketCapElement) marketCapElement.textContent = `$${data.marketCap || 'N/A'}`;
-    if (previousCloseElement) previousCloseElement.textContent = `$${data.previousClose || '0.00'}`;
-    if (openElement) openElement.textContent = `$${data.open || '0.00'}`;
-    if (fiftyTwoWeekHighElement) fiftyTwoWeekHighElement.textContent = `$${data.fiftyTwoWeekHigh || '0.00'}`;
-    if (fiftyTwoWeekLowElement) fiftyTwoWeekLowElement.textContent = `$${data.fiftyTwoWeekLow || '0.00'}`;
+    if (previousCloseElement) previousCloseElement.textContent = `$${data.previousClose?.toFixed(2) || '0.00'}`;
+    if (openElement) openElement.textContent = `$${data.open?.toFixed(2) || '0.00'}`;
     if (lastTradeTimeElement) lastTradeTimeElement.textContent = data.lastTradeTime || '--';
 
-    // Update last updated time
-    updateDateTime();
+    // For 52-week high/low, we'll use the historical data if available
+    if (data.historicalData) {
+        const prices = data.historicalData.map(d => d.price);
+        const fiftyTwoWeekHigh = Math.max(...prices);
+        const fiftyTwoWeekLow = Math.min(...prices);
+        
+        if (fiftyTwoWeekHighElement) fiftyTwoWeekHighElement.textContent = `$${fiftyTwoWeekHigh.toFixed(2)}`;
+        if (fiftyTwoWeekLowElement) fiftyTwoWeekLowElement.textContent = `$${fiftyTwoWeekLow.toFixed(2)}`;
+    }
 
-    console.log('UI update completed');
+    updateDateTime();
 }
 
-// Show error message
 function showError(message) {
-    if (errorMessageElement) {
-        errorMessageElement.textContent = message;
-    }
+    if (errorMessageElement) errorMessageElement.textContent = message;
     showSection('error');
 }
 
-// Initialize chart
 function initializeChart(historicalData) {
-    console.log('Initializing chart with data:', historicalData);
-
-    if (!priceChartCanvas) {
-        console.error('Chart canvas not found');
-        return;
-    }
-
-    if (!historicalData || historicalData.length === 0) {
-        console.error('No historical data provided for chart');
-        return;
-    }
-
-    // Check if Chart.js is loaded
-    if (typeof Chart === 'undefined') {
-        console.error('Chart.js not loaded');
+    if (!priceChartCanvas || !historicalData?.length || typeof Chart === 'undefined') {
+        console.error('Chart initialization failed - missing requirements');
         return;
     }
 
     const ctx = priceChartCanvas.getContext('2d');
+    if (priceChart) priceChart.destroy();
 
-    // Destroy previous chart if it exists
-    if (priceChart) {
-        priceChart.destroy();
-        priceChart = null;
-    }
-
-    // Prepare chart data
     const labels = historicalData.map(data => data.date);
     const prices = historicalData.map(data => data.price);
-
-    console.log('Chart labels:', labels);
-    console.log('Chart prices:', prices);
-
-    // Determine line color based on price trend
     const lineColor = prices[0] <= prices[prices.length - 1] ? '#059669' : '#dc2626';
 
-    try {
-        priceChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Stock Price',
-                    data: prices,
-                    borderColor: lineColor,
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.1,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    },
-                    y: {
-                        beginAtZero: false
-                    }
-                },
-                interaction: {
-                    mode: 'nearest',
-                    axis: 'x',
-                    intersect: false
-                }
+    priceChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Stock Price',
+                data: prices,
+                borderColor: lineColor,
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                borderWidth: 2,
+                tension: 0.1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { display: false } },
+                y: { beginAtZero: false }
             }
-        });
-        console.log('Chart created successfully');
-    } catch (error) {
-        console.error('Error creating chart:', error);
-    }
+        }
+    });
 }
 
-// Update chart time range
 function updateChartTimeRange() {
-    // In a real app, this would fetch new data based on the selected range
-    // For this demo, we'll just log the selection
     const range = timeRangeSelect.value;
     console.log(`Time range changed to: ${timeRangeSelect.options[range-1].text}`);
+    // In a real implementation, we would fetch new data based on the selected range
 }
 
-// Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', init);
